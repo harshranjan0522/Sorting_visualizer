@@ -2,154 +2,394 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Sorting Visualizer</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SORTING VISUALIZER</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
         body {
-            background: #121212;
-            color: #f1f1f1;
-            font-family: Arial, sans-serif;
+            background-image: url('Desktop - 1.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        header {
+            margin-top: 90px;
             text-align: center;
-            padding: 20px;
         }
 
-        input,
-        select,
-        button {
+        header h2 {
+            font-size: 4rem;
+            letter-spacing: 4px;
+        }
+
+        .input {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin: 50px;
+        }
+
+        .input input {
+            width: 350px;
             padding: 10px;
-            font-size: 16px;
-            margin: 5px;
-            border-radius: 5px;
+            border-radius: 30px;
             border: none;
+            box-shadow: 0px 0px 10px aqua;
+            margin: 30px;
         }
 
-        .bar-container {
+        select {
+            border: none;
+            border-radius: 30px;
+            width: 250px;
+            padding: 10px 20px;
+            box-shadow: 0px 0px 10px aqua;
+        }
+
+        .input button {
+            background-color: rgb(0, 83, 83);
+            color: white;
+            border: none;
+            width: 100px;
+            padding: 10px;
+            margin: 30px;
+            border-radius: 30px;
+            transition: background-color 0.3s ease;
+        }
+
+        .input button:hover {
+            background-color: rgb(0, 44, 44);
+            cursor: pointer;
+        }
+
+        .bar_visualization {
             display: flex;
             align-items: flex-end;
             justify-content: center;
             height: 300px;
-            margin-top: 30px;
-            gap: 2px;
+            margin: 20px;
+            gap: 5px;
         }
 
         .bar {
             width: 30px;
-            position: relative;
-            background: #2196f3;
-            transition: height 0.5s ease, background 0.2s ease;
-        }
-
-        .bar span {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
+            background-color: aqua;
+            text-align: center;
+            color: black;
             font-size: 12px;
         }
 
         .bar.active {
-            background: #ffeb3b;
+            background-color: orange;
         }
 
         .bar.sorted {
-            background: #4caf50;
+            background-color: limegreen;
         }
 
-        #algoInfo {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #a1a1a1;
-            display: none;
+        .stepMessage {
+            text-align: center;
+            font-size: 16px;
+            color: white;
+            margin-bottom: 20px;
         }
 
-        pre {
-            background: #1e1e1e;
-            color: #f1f1f1;
+        .centre {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 20px;
+            color: white;
+        }
+
+        .algo_info,
+        .code_snippet {
+            width: 500px;
+            text-align: center;
+            white-space: pre-wrap;
+            background-color: #00ffff1f;
+            padding: 20px;
+            border-radius: 30px;
+        }
+
+        .code_snippet {
             text-align: left;
-            margin: 20px auto;
-            padding: 15px;
-            width: 90%;
-            max-width: 700px;
-            border-radius: 10px;
-            overflow-x: auto;
+        }
+
+        /* TERMINAL STYLES */
+        .terminal {
+            margin: 4rem auto;
+            max-width: 850px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 255, 115, 0.15);
+            border: 1px solid rgba(0, 255, 115, 0.2);
+            background: #0a0f17;
+        }
+
+        .terminal-container {
+            background: #0a0f17;
+            color: #e0e0e0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .terminal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.8rem 1.5rem;
+            border-bottom: 1px solid rgba(0, 255, 115, 0.1);
+        }
+
+        .terminal-tabs {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .tab-btn {
+            background: transparent;
+            color: #7a7a8c;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #00ff73;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            color: #d4d4d4;
+        }
+
+        .tab-btn.active {
+            color: #00ff73;
+            background: rgba(0, 255, 115, 0.1);
+        }
+
+        .tab-btn.active::before {
+            transform: scaleX(1);
+        }
+
+        .terminal-controls {
+            display: flex;
+            gap: 0.6rem;
+        }
+
+        .control-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .control-dot:hover {
+            opacity: 1;
+        }
+
+        .red {
+            background: #ff5f56;
+        }
+
+        .yellow {
+            background: #ffbd2e;
+        }
+
+        .green {
+            background: #27c93f;
+        }
+
+        .terminal-body {
+            padding: 1.8rem;
+            min-height: 280px;
+            max-height: 400px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #00ff73 #0a0f17;
+        }
+
+        .terminal-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .terminal-body::-webkit-scrollbar-track {
+            background: #0a0f17;
+        }
+
+        .terminal-body::-webkit-scrollbar-thumb {
+            background-color: #00ff73;
+            border-radius: 3px;
+        }
+
+        .code-display {
             display: none;
+            margin: 0;
+            white-space: pre-wrap;
+            tab-size: 4;
+        }
+
+        .code-display.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0.5;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+            font-weight: bold;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .code-operator {
+            color: #d4d4d4;
+            font-weight: bold;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .terminal {
+                margin: 2rem auto;
+                border-radius: 8px;
+            }
+
+            .terminal-header {
+                padding: 0.6rem 1rem;
+            }
+
+            .terminal-tabs {
+                gap: 0.4rem;
+            }
+
+            .tab-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+
+            .terminal-body {
+                padding: 1.2rem;
+                min-height: 220px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <h2>Sorting Visualizer</h2>
-    <input id="arrayInput" placeholder="Enter numbers (e.g. 5,1,3,4)" />
-    <button onclick="startSort()">Sort</button>
-    <br>
-    <select id="algoSelect" onchange="showAlgoInfo()">
-        <option value="">-- Select Sorting Algorithm --</option>
-        <option value="bubble">Bubble Sort</option>
-        <option value="selection">Selection Sort</option>
-        <option value="merge">Merge Sort</option>
-        <option value="quick">Quick Sort</option>
-    </select>
-    <div id="algoInfo"></div>
-    <pre id="codeSnippet"></pre>
-    <div class="bar-container" id="barContainer"></div>
-    <div id="stepMessage" style="margin-top: 15px; font-size: 16px; color: #f5f5f5;"></div>
+    <header>
+        <div class="title">
+            <h2><span style="color: aqua;"><strong>SORTING</strong></span></h2>
+            <h2><span style="color: white;"><strong>VISUALIZER</strong></span></h2>
+        </div>
+    </header>
+
+    <div class="input">
+        <input id="arrayInput" placeholder="Enter comma separated numbers (e.g., 5,2,4,3)">
+        <select id="algoSelect" onchange="showAlgoInfo()">
+            <option value="">SELECT SORTING ALGORITHM</option>
+            <option value="bubble">BUBBLE SORT</option>
+            <option value="selection">SELECTION SORT</option>
+            <option value="merge">MERGE SORT</option>
+            <option value="quick">QUICK SORT</option>
+        </select>
+        <button onclick="startSort()">SORT</button>
+    </div>
+
+    <div id="barContainer" class="bar_visualization"></div>
+    <div id="stepMessage" class="stepMessage"></div>
+
+    <div class="centre">
+        <div id="algoInfo" class="algo_info"></div>
+        <div id="codeSnippet" class="code_snippet"></div>
+    </div>
+
+    <div class="terminal">
+        <div class="terminal-container">
+            <div class="terminal-header">
+                <div class="terminal-tabs">
+                    <button class="tab-btn active" data-lang="bubble">BUBBLE SORT</button>
+                    <button class="tab-btn" data-lang="selection">SELECTION SORT</button>
+                    <button class="tab-btn" data-lang="merge">MERGE SORT</button>
+                    <button class="tab-btn" data-lang="quick">QUICK SORT</button>
+                </div>
+                <div class="terminal-controls">
+                    <span class="control-dot red"></span>
+                    <span class="control-dot yellow"></span>
+                    <span class="control-dot green"></span>
+                </div>
+            </div>
+            <div class="terminal-body">
+                <pre class="code-display active" id="bubble-code"></pre>
+                <pre class="code-display" id="selection-code"></pre>
+                <pre class="code-display" id="merge-code"></pre>
+                <pre class="code-display" id="quick-code"></pre>
+            </div>
+        </div>
+    </div>
+
     <script>
-        function showMessage(msg) {
-            document.getElementById("stepMessage").innerText = msg;
-        }
-
         let array = [];
-        const delay = 1500;
-
-        const codeSnippets = {
-            bubble: `// Bubble Sort
-for i = 0 to n-1
-  for j = 0 to n-i-1
-    if arr[j] > arr[j+1]
-      swap(arr[j], arr[j+1])`,
-            selection: `// Selection Sort
-for i = 0 to n-1
-  minIndex = i
-  for j = i+1 to n
-    if arr[j] < arr[minIndex]
-      minIndex = j
-  swap(arr[i], arr[minIndex])`,
-            merge: `// Merge Sort
-mergeSort(arr[], l, r):
-  if l < r:
-    m = (l+r)/2
-    mergeSort(arr, l, m)
-    mergeSort(arr, m+1, r)
-    merge(arr, l, m, r)`,
-            quick: `// Quick Sort
-quickSort(arr[], low, high):
-  if low < high:
-    pi = partition(arr, low, high)
-    quickSort(arr, low, pi-1)
-    quickSort(arr, pi+1, high)`
-        };
-
-        const algoDescriptions = {
-            bubble: {
-                def: "Bubble Sort: Repeatedly compares adjacent elements and swaps them if needed.",
-                time: "Time: O(n²), Best: O(n), Space: O(1)"
-            },
-            selection: {
-                def: "Selection Sort: Finds the minimum element and places it at the beginning.",
-                time: "Time: O(n²), Best: O(n²), Space: O(1)"
-            },
-            merge: {
-                def: "Merge Sort: Divide and conquer algorithm that merges sorted halves.",
-                time: "Time: O(n log n), Space: O(n)"
-            },
-            quick: {
-                def: "Quick Sort: Partitions the array around a pivot and sorts subarrays.",
-                time: "Time: Avg O(n log n), Worst: O(n²), Space: O(log n)"
-            }
-        };
+        const delay = 800;
 
         function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function showMessage(msg) {
+            document.getElementById("stepMessage").innerText = msg;
         }
 
         function drawBars(highlight = [], sorted = []) {
@@ -203,8 +443,8 @@ quickSort(arr[], low, high):
         async function mergeSort(l = 0, r = array.length - 1) {
             if (l >= r) return;
 
-            showMessage(`Dividing: [${l} ... ${r}]`);
-            drawBars(Array.from({ length: r - l + 1 }, (_, i) => i + l));
+            showMessage(`Dividing: [${array.slice(l, r + 1).join(', ')}]`);
+            drawBars([...Array(r - l + 1).keys()].map(i => i + l));
             await sleep(delay);
 
             const m = Math.floor((l + r) / 2);
@@ -213,10 +453,8 @@ quickSort(arr[], low, high):
             await merge(l, m, r);
         }
 
-
-
         async function merge(l, m, r) {
-            showMessage(`Merging: [${l} ... ${r}]`);
+            showMessage(`Merging: [${array.slice(l, r + 1).join(', ')}]`);
 
             const left = array.slice(l, m + 1);
             const right = array.slice(m + 1, r + 1);
@@ -240,11 +478,9 @@ quickSort(arr[], low, high):
                 await sleep(delay);
             }
 
-            drawBars(Array.from({ length: r - l + 1 }, (_, i) => i + l));
+            drawBars([], array.map((_, i) => i));
             await sleep(delay);
         }
-
-
 
         async function quickSort(low = 0, high = array.length - 1) {
             if (low < high) {
@@ -256,12 +492,11 @@ quickSort(arr[], low, high):
 
         async function partition(low, high) {
             let pivot = array[high];
-            showMessage(`Pivot selected: ${pivot} at index ${high}`);
+            showMessage(`Pivot selected: ${pivot} (Index ${high})`);
             drawBars([high]);
             await sleep(delay);
 
             let i = low - 1;
-
             for (let j = low; j < high; j++) {
                 drawBars([j, high]);
                 await sleep(delay);
@@ -272,13 +507,11 @@ quickSort(arr[], low, high):
                     await sleep(delay);
                 }
             }
-
             [array[i + 1], array[high]] = [array[high], array[i + 1]];
             drawBars([i + 1]);
             await sleep(delay);
             return i + 1;
         }
-
 
         async function startSort() {
             const input = document.getElementById("arrayInput").value;
@@ -288,12 +521,12 @@ quickSort(arr[], low, high):
 
             array = input.split(',').map(Number);
             drawBars();
+            showMessage("");
 
             if (algo === "bubble") await bubbleSort();
             else if (algo === "selection") await selectionSort();
             else if (algo === "merge") await mergeSort();
             else if (algo === "quick") await quickSort();
-            document.getElementById("stepMessage").innerText = "";
 
             drawBars([], array.map((_, i) => i));
         }
@@ -303,20 +536,216 @@ quickSort(arr[], low, high):
             const infoDiv = document.getElementById("algoInfo");
             const codeDiv = document.getElementById("codeSnippet");
 
+            const descriptions = {
+                bubble: {
+                    def: "Bubble Sort: Repeatedly compares adjacent elements and swaps if out of order.",
+                    time: "Time: O(n²), Best: O(n), Space: O(1)",
+                    code: `for i = 0 to n-1\n  for j = 0 to n-i-1\n    if arr[j] > arr[j+1]\n      swap(arr[j], arr[j+1])`
+                },
+                selection: {
+                    def: "Selection Sort: Selects the minimum element and moves it to the beginning.",
+                    time: "Time: O(n²), Best: O(n²), Space: O(1)",
+                    code: `for i = 0 to n-1\n  minIndex = i\n  for j = i+1 to n\n    if arr[j] < arr[minIndex]\n      minIndex = j\n  swap(arr[i], arr[minIndex])`
+                },
+                merge: {
+                    def: "Merge Sort: Recursively divides the array and merges sorted halves.",
+                    time: "Time: O(n log n), Space: O(n)",
+                    code: `mergeSort(arr[], l, r):\n  if l < r:\n    m = (l+r)/2\n    mergeSort(arr, l, m)\n    mergeSort(arr, m+1, r)\n    merge(arr, l, m, r)`
+                },
+                quick: {
+                    def: "Quick Sort: Picks a pivot and partitions around it recursively.",
+                    time: "Time: Avg O(n log n), Worst: O(n²), Space: O(log n)",
+                    code: `quickSort(arr[], low, high):\n  if low < high:\n    pi = partition(arr, low, high)\n    quickSort(arr, low, pi-1)\n    quickSort(arr, pi+1, high)`
+                }
+            };
+
             if (!algo) {
-                infoDiv.style.display = "none";
-                codeDiv.style.display = "none";
+                infoDiv.innerText = "";
+                codeDiv.innerText = "";
                 return;
             }
 
-            const { def, time } = algoDescriptions[algo];
-            infoDiv.innerHTML = `<strong>${def}</strong><br>${time}`;
-            infoDiv.style.display = "block";
-
-            codeDiv.innerText = codeSnippets[algo];
-            codeDiv.style.display = "block";
+            infoDiv.innerHTML = `<strong>${descriptions[algo].def}</strong><br>${descriptions[algo].time}`;
+            codeDiv.innerText = descriptions[algo].code;
         }
-    </script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Array code examples
+            const codeExamples = {
+                bubble: `#include <iostream>
+using namespace std;
+
+void bubbleSort(int arr[], int n) {
+    for(int i = 0; i < n - 1; ++i) {
+        bool swapped = false;
+        for(int j = 0; j < n - i - 1; ++j) {
+            if(arr[j] > arr[j + 1]) {
+                swap(arr[j], arr[j + 1]);
+                swapped = true;
+            }
+        }
+        if (!swapped) break; // Optimization
+    }
+}
+
+void printArray(int arr[], int n) {
+    for(int i = 0; i < n; ++i) cout << arr[i] << " ";
+    cout << endl;
+}
+
+int main() {
+    int arr[] = {64, 25, 12, 22, 11};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    bubbleSort(arr, n);
+    printArray(arr, n);
+    return 0;
+}
+`,
+
+                selection: `#include <iostream>
+using namespace std;
+
+void selectionSort(int arr[], int n) {
+    for(int i = 0; i < n - 1; ++i) {
+        int minIndex = i;
+        for(int j = i + 1; j < n; ++j)
+            if(arr[j] < arr[minIndex])
+                minIndex = j;
+        swap(arr[i], arr[minIndex]);
+    }
+}
+
+void printArray(int arr[], int n) {
+    for(int i = 0; i < n; ++i) cout << arr[i] << " ";
+    cout << endl;
+}
+
+int main() {
+    int arr[] = {29, 10, 14, 37, 13};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    selectionSort(arr, n);
+    printArray(arr, n);
+    return 0;
+}`,
+
+                merge: `#include <iostream>
+using namespace std;
+
+void merge(int arr[], int l, int m, int r) {
+    int n1 = m - l + 1;
+    int n2 = r - m;
+    int L[n1], R[n2];
+
+    for(int i = 0; i < n1; ++i) L[i] = arr[l + i];
+    for(int j = 0; j < n2; ++j) R[j] = arr[m + 1 + j];
+
+    int i = 0, j = 0, k = l;
+    while(i < n1 && j < n2)
+        arr[k++] = (L[i] <= R[j]) ? L[i++] : R[j++];
+    while(i < n1) arr[k++] = L[i++];
+    while(j < n2) arr[k++] = R[j++];
+}
+
+void mergeSort(int arr[], int l, int r) {
+    if(l < r) {
+        int m = l + (r - l) / 2;
+        mergeSort(arr, l, m);
+        mergeSort(arr, m + 1, r);
+        merge(arr, l, m, r);
+    }
+}
+
+void printArray(int arr[], int n) {
+    for(int i = 0; i < n; ++i) cout << arr[i] << " ";
+    cout << endl;
+}
+
+int main() {
+    int arr[] = {38, 27, 43, 3, 9, 82, 10};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    mergeSort(arr, 0, n - 1);
+    printArray(arr, n);
+    return 0;
+}`,
+
+                quick: `#include <iostream>
+using namespace std;
+
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high]; // pivot
+    int i = (low - 1); // Index of smaller element
+
+    for(int j = low; j < high; ++j) {
+        if(arr[j] <= pivot) {
+            ++i;
+            swap(arr[i], arr[j]);
+        }
+    }
+    swap(arr[i + 1], arr[high]);
+    return (i + 1);
+}
+
+void quickSort(int arr[], int low, int high) {
+    if(low < high) {
+        int pi = partition(arr, low, high); // Partitioning index
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+void printArray(int arr[], int n) {
+    for(int i = 0; i < n; ++i) cout << arr[i] << " ";
+    cout << endl;
+}
+
+int main() {
+    int arr[] = {10, 7, 8, 9, 1, 5};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    quickSort(arr, 0, n - 1);
+    printArray(arr, n);
+    return 0;
+}`
+            };
+
+            // Initialize terminal
+            function initTerminal() {
+                const tabs = document.querySelectorAll('.tab-btn');
+                const codeDisplays = document.querySelectorAll('.code-display');
+
+                // Set initial active tab
+                setActiveTab('bubble');
+
+                // Add click event listeners to tabs
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const lang = tab.dataset.lang;
+                        setActiveTab(lang);
+                    });
+                });
+            }
+
+            // Set active tab and display corresponding code
+            function setActiveTab(lang) {
+                // Update active tab button
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.lang === lang) {
+                        btn.classList.add('active');
+                    }
+                });
+
+                // Update code display
+                document.querySelectorAll('.code-display').forEach(display => {
+                    display.classList.remove('active');
+                    if (display.id === `${lang}-code`) {
+                        display.classList.add('active');
+                        display.textContent = codeExamples[lang];
+                    }
+                });
+            }
+
+            // Initialize when DOM is loaded
+            initTerminal();
+        });</script>
 </body>
 
 </html>
