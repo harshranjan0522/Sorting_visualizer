@@ -60,8 +60,18 @@
         </div>
     </div>
 
-    
+    <!-- Move initTerminal logic inside script file or define it before calling -->
     <script src="script.js"></script>
+    <script>
+        // Ensure initialization happens after DOM load and script.js load
+        window.addEventListener('DOMContentLoaded', () => {
+            if (typeof initTerminal === 'function') {
+                initTerminal();
+            } else {
+                console.error("initTerminal is not defined or script.js didn't load correctly.");
+            }
+        });
+    </script>
 </body>
 
 </html>
